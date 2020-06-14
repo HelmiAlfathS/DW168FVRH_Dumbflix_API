@@ -16,6 +16,13 @@ const {
 } = require('../controllers/film');
 const { auth } = require('../middleware');
 
+const {
+  getEpisode,
+  addEpisode,
+  detailEpisode,
+  editEpisode,
+  deleteEpisode,
+} = require('../controllers/episode');
 // -------------- DECLARING -------------------------
 
 const {
@@ -51,5 +58,11 @@ router.post('/film', auth, addFilm);
 router.get('/film/:id', detailFilm);
 router.put('/film/:id', auth, editFilm);
 router.delete('/film/:id', auth, deleteFilm);
+
+router.get('/film/:id/episode', getEpisode);
+router.get('/film/:idFilm/episode/:idEps', detailEpisode);
+router.post('/film/:id/episode', addEpisode);
+router.put('/film/:idFilm/episode/:idEps', editEpisode);
+router.delete('/film/:idFilm/episode/:idEps', deleteEpisode);
 
 module.exports = router;

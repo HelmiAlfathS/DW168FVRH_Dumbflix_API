@@ -16,7 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'categoryId',
       as: 'category',
       onDelete: 'CASCADE',
-    });
+    }),
+      Films.hasMany(models.Episode, {
+        as: 'episode',
+      });
   };
   return Films;
 };

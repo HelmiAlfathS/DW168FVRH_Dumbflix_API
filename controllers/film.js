@@ -58,9 +58,7 @@ exports.addFilm = async (req, res) => {
         include: {
           model: Category,
           as: 'category',
-          attributes: {
-            exclude: ['CategoryId', 'createdAt', 'updatedAt'],
-          },
+          attributes: ['id', 'category'],
         },
         attributes: {
           exclude: ['categoryId', 'CategoryId', 'createdAt', 'updatedAt'],
