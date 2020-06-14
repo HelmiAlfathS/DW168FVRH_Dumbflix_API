@@ -12,6 +12,7 @@ const {
   addFilm,
   editFilm,
   deleteFilm,
+  detailFilm,
 } = require('../controllers/film');
 const { auth } = require('../middleware');
 
@@ -47,6 +48,7 @@ router.delete('/category/:id', auth, deleteCategory);
 
 router.get('/film', getFilm);
 router.post('/film', auth, addFilm);
+router.get('/film/:id', detailFilm);
 router.put('/film/:id', auth, editFilm);
 router.delete('/film/:id', auth, deleteFilm);
 

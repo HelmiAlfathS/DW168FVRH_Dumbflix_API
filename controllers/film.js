@@ -23,7 +23,9 @@ exports.getFilm = async (req, res) => {
       return res.status(400).send({ message: 'Film is not found' });
     }
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      error: 'internal server error',
+    });
   }
 };
 
@@ -73,6 +75,9 @@ exports.addFilm = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(500).json({
+      error: 'internal server error',
+    });
   }
 };
 
@@ -119,7 +124,9 @@ exports.editFilm = async (req, res) => {
       return res.status(400).send({ message: 'Please Try Again' });
     }
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      error: 'internal server error',
+    });
   }
 };
 exports.deleteFilm = async (req, res) => {
@@ -135,6 +142,37 @@ exports.deleteFilm = async (req, res) => {
       message: 'Film has been deleted',
     });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      error: 'internal server error',
+    });
+  }
+};
+
+exports.detailFilm = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const film = await Films.findOne({
+      where: { id },
+      include: {
+        model: Category,
+        as: 'category',
+        attributes: {
+          exclude: ['CategoryId', 'createdAt', 'updatedAt'],
+        },
+      },
+      attributes: {
+        exclude: ['categoryId', 'CategoryId', 'createdAt', 'updatedAt'],
+      },
+    });
+    if (!film) {
+      return res.status(400).json({
+        message: 'Film is not Found',
+      });
+    }
+    res.send({ data: film });
+  } catch (error) {
+    res.status(500).json({
+      error: 'internal server error',
+    });
   }
 };
