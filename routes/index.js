@@ -61,8 +61,8 @@ router.delete('/film/:id', auth, deleteFilm);
 
 router.get('/film/:id/episode', getEpisode);
 router.get('/film/:idFilm/episode/:idEps', detailEpisode);
-router.post('/film/:id/episode', addEpisode);
-router.put('/film/:idFilm/episode/:idEps', editEpisode);
-router.delete('/film/:idFilm/episode/:idEps', deleteEpisode);
+router.post('/film/:id/episode', auth, addEpisode);
+router.put('/film/:idFilm/episode/:idEps', auth, editEpisode);
+router.delete('/film/:idFilm/episode/:idEps', auth, deleteEpisode);
 
 module.exports = router;
