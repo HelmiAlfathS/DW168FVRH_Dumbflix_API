@@ -9,10 +9,12 @@ module.exports = (sequelize, DataTypes) => {
       gender: DataTypes.STRING,
       phone: DataTypes.STRING,
       address: DataTypes.STRING,
-      subscribe: DataTypes.BOOLEAN,
+      subscribe: { type: DataTypes.BOOLEAN, defaultValue: false },
     },
     {}
   );
-  Users.associate = function (models) {};
+  Users.associate = function (models) {
+    Users.hasMany(models.Transaction);
+  };
   return Users;
 };

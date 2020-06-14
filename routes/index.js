@@ -23,7 +23,6 @@ const {
   editEpisode,
   deleteEpisode,
 } = require('../controllers/episode');
-// -------------- DECLARING -------------------------
 
 const {
   read: findContacts,
@@ -35,6 +34,12 @@ const {
   readOne: findUser,
   deleteUser: deleteUser,
 } = require('../controllers/user.js');
+const {
+  getTransaction,
+  addTransaction,
+  transactionCategory,
+  editTransaction,
+} = require('../controllers/transaction');
 
 // ------------- ROUTINGS ----------------------------
 
@@ -65,4 +70,8 @@ router.post('/film/:id/episode', auth, addEpisode);
 router.put('/film/:idFilm/episode/:idEps', auth, editEpisode);
 router.delete('/film/:idFilm/episode/:idEps', auth, deleteEpisode);
 
+router.get('/transaction', getTransaction);
+router.get('/transaction/:id', auth, transactionCategory);
+router.post('/transaction', auth, addTransaction);
+router.put('/transaction/:id', auth, editTransaction);
 module.exports = router;
