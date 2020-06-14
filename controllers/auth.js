@@ -16,6 +16,7 @@ exports.register = async (req, res) => {
       gender: Joi.string().required(),
       phone: Joi.string().min(10).required(),
       address: Joi.string().required(),
+      subscribe: Joi.boolean(),
     });
     const { error } = schema.validate(req.body);
 
@@ -45,7 +46,7 @@ exports.register = async (req, res) => {
         },
       });
     } else {
-      res.status(201).send({
+      res.status(401).send({
         message: 'Email sudah terdaftar, mohon gunakan alamat email yang lain.',
       });
     }

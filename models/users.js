@@ -9,11 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       gender: DataTypes.STRING,
       phone: DataTypes.STRING,
       address: DataTypes.STRING,
+      subscribe: DataTypes.BOOLEAN,
     },
     {}
   );
-  Users.associate = function (models) {
-    // associations can be defined here
-  };
+  Users.associate = function (models) {};
   return Users;
 };
