@@ -13,6 +13,7 @@ const {
   editFilm,
   deleteFilm,
   detailFilm,
+  readEpisodes,
 } = require('../controllers/film');
 const { auth } = require('../middleware');
 
@@ -37,8 +38,8 @@ const {
 const {
   getTransaction,
   addTransaction,
-  transactionCategory,
   editTransaction,
+  deleteTransaction,
 } = require('../controllers/transaction');
 
 // ------------- ROUTINGS ----------------------------
@@ -71,7 +72,9 @@ router.put('/film/:idFilm/episode/:idEps', auth, editEpisode);
 router.delete('/film/:idFilm/episode/:idEps', auth, deleteEpisode);
 
 router.get('/transaction', getTransaction);
-router.get('/transaction/:id', auth, transactionCategory);
+router.delete('/transaction/:id', auth, deleteTransaction);
 router.post('/transaction', auth, addTransaction);
 router.put('/transaction/:id', auth, editTransaction);
 module.exports = router;
+
+// router.get('/filmeps', readEpisodes);

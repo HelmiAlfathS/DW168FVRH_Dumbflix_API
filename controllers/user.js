@@ -8,9 +8,11 @@ exports.read = async (req, res) => {
       },
     });
 
-    res.send({ data: users });
+    res.status(200).send({ data: users });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      error: 'internal server error',
+    });
   }
 };
 
@@ -25,10 +27,18 @@ exports.readOne = async (req, res) => {
         id,
       },
     });
-
-    res.send({ data: user });
+    if (user) {
+      return res.status(200).send({
+        data: user,
+      });
+    } else {
+      return res.status(400).send({ message: 'User is not found' });
+    }
+    // res.status(200).send({ data: user });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      error: 'internal server error',
+    });
   }
 };
 
@@ -40,8 +50,11 @@ exports.deleteUser = async (req, res) => {
         id,
       },
     });
-    res.send({ data: id });
+    res.status(200).send({ data: id });
   } catch (error) {
     console.log(error);
+    // res.status(500).json({
+    //   error: 'internal server error',
+    // });
   }
 };

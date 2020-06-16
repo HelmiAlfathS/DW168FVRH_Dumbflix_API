@@ -23,7 +23,14 @@ exports.getEpisode = async (req, res) => {
         exclude: ['filmId', 'createdAt', 'updatedAt'],
       },
     });
-    res.send({ data: episode });
+    if (episode) {
+      return res.status(200).send({
+        data: episode,
+      });
+    } else {
+      return res.status(400).send({ message: 'Episode is not found' });
+    }
+    // res.send({ data: episode });
   } catch (error) {
     res.status(500).json({
       error: 'internal server error',
@@ -53,9 +60,10 @@ exports.addEpisode = async (req, res) => {
       data: newEpisode,
     });
   } catch (error) {
-    res.status(500).json({
-      error: 'internal server error',
-    });
+    console.log(error);
+    // res.status(500).json({
+    //   error: 'internal server error',
+    // });
   }
 };
 
@@ -81,7 +89,14 @@ exports.detailEpisode = async (req, res) => {
         exclude: ['filmId', 'createdAt', 'updatedAt'],
       },
     });
-    res.send({ data: episode });
+    if (episode) {
+      return res.status(200).send({
+        data: episode,
+      });
+    } else {
+      return res.status(400).send({ message: 'Episode is not found' });
+    }
+    // res.send({ data: episode });
   } catch (error) {
     res.status(500).json({
       error: 'internal server error',
@@ -105,12 +120,12 @@ exports.editEpisode = async (req, res) => {
         error: error.details[0].message,
       });
     }
-    const update = await Episode.update(req.body, { where: { title: idEps } });
+    const update = await Episode.update(req.body, { where: { id: idEps } });
     if (update) {
       const { title } = req.body;
       const grabResult = await Episode.findOne({
         where: {
-          title: title,
+          id: idEps,
         },
         include: {
           model: Films,

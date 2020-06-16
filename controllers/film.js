@@ -1,4 +1,4 @@
-const { Films, Category } = require('../models');
+const { Films, Category, Episode } = require('../models');
 const Joi = require('@hapi/joi');
 
 exports.getFilm = async (req, res) => {
@@ -16,7 +16,7 @@ exports.getFilm = async (req, res) => {
       },
     });
     if (film) {
-      return res.send({
+      return res.status(200).send({
         data: film,
       });
     } else {
@@ -65,7 +65,7 @@ exports.addFilm = async (req, res) => {
         },
       });
 
-      return res.send({
+      return res.status(200).send({
         data: grabResult,
       });
     } else {
@@ -167,10 +167,52 @@ exports.detailFilm = async (req, res) => {
         message: 'Film is not Found',
       });
     }
-    res.send({ data: film });
+    res.status(200).send({ data: film });
   } catch (error) {
     res.status(500).json({
       error: 'internal server error',
     });
+  }
+};
+
+// exports.getEpisodebyFilm = async (req,res)=>{
+//   try {
+//     const {id} = req.params;
+//     const episode = await Films.findOne({
+//       where : {id},
+//       include: [
+//         {
+//           [arraymodel]
+//         }
+//       ]
+//     })
+//   } catch (error) {
+
+//   }
+// }
+exports.readEpisodes = async (req, res) => {
+  try {
+    const { id: filmId } = req.params;
+    const film = await Film.findOne({
+      where: { id: filmId },
+      include: [
+        {
+          model: Category,
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        },
+        {
+          model: Episode,
+          attributes: {
+            exclude: ['FilmId', 'filmId', 'createdAt', 'updatedAt'],
+          },
+        },
+      ],
+      attributes: {
+        exclude: ['categoryId', 'CategoryId', 'createdAt', 'updatedAt'],
+      },
+    });
+    return res.send({ data: { film } });
+  } catch (error) {
+    return res.status(500).send({ error: 'Internal Server Error' });
   }
 };

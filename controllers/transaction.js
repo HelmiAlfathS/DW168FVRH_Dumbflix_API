@@ -74,33 +74,42 @@ exports.addTransaction = async (req, res) => {
   }
 };
 
-exports.transactionCategory = async (req, res) => {
+exports.deleteTransaction = async (req, res) => {
   try {
     const { id } = req.params;
-    const transaction = await Transaction.findOne({
-      where: { id },
-      // include: [
-      //   {
-      //     model: Users,
-      //     as: 'user',
-      //     attributes: {
-      //       exclude: ['createdAt', 'updatedAt', 'password'],
-      //     },
-      //   },
-      // ],
-      // attributes: {
-      //   exclude: ['createdAt', 'updatedAt', 'userId'],
-      // },
-    });
-    if (transaction) {
-      return res.status(200).send({
+    const transaction = await Transaction.destroy({
+      where: {
         id: id,
-      });
-    } else {
-      return res.status(400).send({
-        message: 'transaction is not found',
-      });
-    }
+      },
+    });
+    res.status(200).json({
+      status: 'success',
+      message: 'transaction has been deleted',
+    });
+    // const transaction = await Transaction.findOne({
+    //   where: { id },
+    //   // include: [
+    //   //   {
+    //   //     model: Users,
+    //   //     as: 'user',
+    //   //     attributes: {
+    //   //       exclude: ['createdAt', 'updatedAt', 'password'],
+    //   //     },
+    //   //   },
+    //   // ],
+    //   // attributes: {
+    //   //   exclude: ['createdAt', 'updatedAt', 'userId'],
+    //   // },
+    // });
+    // if (transaction) {
+    //   return res.status(200).send({
+    //     id: id,
+    //   });
+    // } else {
+    //   return res.status(400).send({
+    //     message: 'transaction is not found',
+    //   });
+    // }
   } catch (error) {
     res.status(500).json({
       error: 'internal server error',
@@ -112,8 +121,8 @@ exports.editTransaction = async (req, res) => {
   try {
     const { id } = req.params;
     const schema = Joi.object({
-      startDate: Joi.date().required(),
-      dueDate: Joi.date().required(),
+      // startDate: Joi.date().required(),
+      // dueDate: Joi.date().required(),
       userId: Joi.number().required(),
       attachment: Joi.string().required(),
       status: Joi.boolean().required(),
@@ -143,8 +152,18 @@ exports.editTransaction = async (req, res) => {
           exclude: ['createdAt', 'updatedAt', 'userId'],
         },
       });
+      if (grabResult) {
+        const stats = req.body.status;
+        const idUser = req.body.userId;
+        // console.log(stats);
+        // console.log(idUser);
+        const changeSubs = await Users.update(
+          { subscribe: stats },
+          { where: { id: idUser } }
+        );
+      }
 
-      return res.send({
+      return res.status(200).send({
         data: grabResult,
       });
     } else {
