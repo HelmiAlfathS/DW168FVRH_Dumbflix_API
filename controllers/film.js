@@ -175,33 +175,22 @@ exports.detailFilm = async (req, res) => {
   }
 };
 
-// exports.getEpisodebyFilm = async (req,res)=>{
-//   try {
-//     const {id} = req.params;
-//     const episode = await Films.findOne({
-//       where : {id},
-//       include: [
-//         {
-//           [arraymodel]
-//         }
-//       ]
-//     })
-//   } catch (error) {
-
-//   }
-// }
-exports.readEpisodes = async (req, res) => {
+// router.get("/film/:id/episodes", findEpisodes);
+exports.findEpisodes = async (req, res) => {
   try {
-    const { id: filmId } = req.params;
-    const film = await Film.findOne({
-      where: { id: filmId },
+    const { id } = req.params;
+    console.log(id);
+    const film = await Films.findOne({
+      where: { id: id },
       include: [
         {
           model: Category,
+          as: 'category',
           attributes: { exclude: ['createdAt', 'updatedAt'] },
         },
         {
           model: Episode,
+          as: 'episode',
           attributes: {
             exclude: ['FilmId', 'filmId', 'createdAt', 'updatedAt'],
           },
@@ -213,6 +202,46 @@ exports.readEpisodes = async (req, res) => {
     });
     return res.send({ data: { film } });
   } catch (error) {
+    console.log(error);
+    return res.status(500).send({ error: 'Internal Server Error' });
+  }
+};
+
+exports.findEpisode = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const episode = await Episode.findOne({
+      where: { id },
+      attributes: { exclude: ['FilmId', 'filmId', 'createdAt', 'updatedAt'] },
+    });
+    if (!episode)
+      return res.status(400).send({
+        status: `Failed`,
+        message: `Episode with id : ${id} not found`,
+      });
+    return res.status(200).send({ status: 'Success', data: episode });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ error: 'Internal Server Error' });
+  }
+};
+
+//find episode by title
+exports.findEpisodeTitle = async (req, res) => {
+  try {
+    const { title } = req.params;
+    const episode = await Episode.findOne({
+      where: { title: title },
+      attributes: { exclude: ['FilmId', 'filmId', 'createdAt', 'updatedAt'] },
+    });
+    if (!episode)
+      return res.status(400).send({
+        status: `Failed`,
+        message: `Episode : ${id} is not found`,
+      });
+    return res.status(200).send({ status: 'Success', data: episode });
+  } catch (error) {
+    console.log(error);
     return res.status(500).send({ error: 'Internal Server Error' });
   }
 };

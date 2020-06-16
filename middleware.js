@@ -18,3 +18,24 @@ exports.auth = (req, res, next) => {
     res.status(400).send({ message: 'Invalid token' });
   }
 };
+
+exports.super = async (req, res, next) => {
+  try {
+    const user = await User.findOne({
+      where: {
+        id: req.user.id,
+      },
+    });
+
+    if (user.role !== 1)
+      return res.status(401).send({
+        error: {
+          status: 'Unauthorized',
+          message: 'Access Denied !',
+        },
+      });
+    next();
+  } catch (error) {
+    res.status(400).send({ message: 'Invalid Token' });
+  }
+};

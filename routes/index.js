@@ -13,7 +13,9 @@ const {
   editFilm,
   deleteFilm,
   detailFilm,
-  readEpisodes,
+  findEpisodes,
+  findEpisode,
+  findEpisodeTitle,
 } = require('../controllers/film');
 const { auth } = require('../middleware');
 
@@ -64,8 +66,10 @@ router.post('/film', auth, addFilm);
 router.get('/film/:id', detailFilm);
 router.put('/film/:id', auth, editFilm);
 router.delete('/film/:id', auth, deleteFilm);
+router.get('/film/:id/episodes', findEpisodes); //NEW //AMAN
+router.get('/episode/:id', findEpisode); //NEW //aman
+router.get('/episodetitle/:title', findEpisodeTitle); //New //sepertinya pake title lebih oke krn ntar harusnya kita isi title pake  tabel episode lita isi dgn nomor episode (1,2,3 dll), kalau id kan agak aneh
 
-router.get('/film/:id/episode', getEpisode);
 router.get('/film/:idFilm/episode/:idEps', detailEpisode);
 router.post('/film/:id/episode', auth, addEpisode);
 router.put('/film/:idFilm/episode/:idEps', auth, editEpisode);
