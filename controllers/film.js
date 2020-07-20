@@ -33,10 +33,11 @@ exports.addFilm = async (req, res) => {
   try {
     const schema = Joi.object({
       title: Joi.string().required(),
-      thumbnailFilm: Joi.string().required(),
+      thumbnailFilm: Joi.string(),
       year: Joi.number().required(),
-      categoryId: Joi.required(),
+      categoryId: Joi.number().required(),
       description: Joi.string().required(),
+      linkFilm: Joi.string().required(),
     });
     const { error } = schema.validate(req.body);
     if (error) {
@@ -49,7 +50,10 @@ exports.addFilm = async (req, res) => {
 
     const { title } = req.body;
 
-    const film = await Films.create(req.body);
+    const film = await Films.create({
+      ...req.body,
+      thumbnailFilm: req.file.filename,
+    });
     if (film) {
       const grabResult = await Films.findOne({
         where: {
@@ -85,10 +89,11 @@ exports.editFilm = async (req, res) => {
     // const newFilm = req.body.Film;
     const schema = Joi.object({
       title: Joi.string().required(),
-      thumbnailFilm: Joi.string().required(),
+      thumbnailFilm: Joi.string(),
       year: Joi.number().required(),
       categoryId: Joi.required(),
       description: Joi.string().required(),
+      linkFilm: Joi.string().required(),
     });
     const { error } = schema.validate(req.body);
     if (error) {

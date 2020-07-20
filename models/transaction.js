@@ -3,18 +3,21 @@ module.exports = (sequelize, DataTypes) => {
   const Transaction = sequelize.define(
     'Transaction',
     {
-      startDate: { type: DataTypes.DATE, defaultValue: new Date() },
-      dueDate: DataTypes.DATE,
+      startDate: { type: DataTypes.DATEONLY, defaultValue: new Date() },
+      dueDate: { type: DataTypes.DATEONLY, defaultValue: new Date() },
       userId: DataTypes.NUMBER,
       attachment: DataTypes.STRING,
-      status: DataTypes.BOOLEAN,
+      status: {
+        type: DataTypes.ENUM('approved', 'cancel', 'pending'),
+        defaultValue: 'pending',
+      },
     },
     {}
   );
   Transaction.associate = function (models) {
     Transaction.belongsTo(models.Users, {
       foreignKey: 'userId',
-      as: 'user',
+
       onDelete: 'CASCADE',
     });
   };

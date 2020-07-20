@@ -8,7 +8,9 @@ module.exports = (sequelize, DataTypes) => {
     {}
   );
   Category.associate = function (models) {
-    Category.hasMany(models.Films);
+    Category.hasMany(models.Films, {
+      as: 'films',
+    });
   };
   return Category;
 };

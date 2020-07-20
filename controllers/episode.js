@@ -43,7 +43,7 @@ exports.addEpisode = async (req, res) => {
     const id = req.params.id;
     const schema = Joi.object({
       title: Joi.string().required(),
-      thumbnailFilm: Joi.string().required(),
+      thumbnailFilm: Joi.string(),
       linkFilm: Joi.string().required(),
       filmId: Joi.number(),
     });
@@ -55,7 +55,10 @@ exports.addEpisode = async (req, res) => {
         },
       });
     }
-    const newEpisode = await Episode.create(req.body);
+    const newEpisode = await Episode.create({
+      ...req.body,
+      thumbnailFilm: req.file.filename,
+    });
     res.status(200).send({
       data: newEpisode,
     });

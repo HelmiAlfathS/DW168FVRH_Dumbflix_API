@@ -1,9 +1,16 @@
-const { Category } = require('../models');
+const { Category, Films, Episode } = require('../models');
 const Joi = require('@hapi/joi');
 
 exports.getCategory = async (req, res) => {
   try {
     const category = await Category.findAll({
+      include: [
+        {
+          model: Films,
+          as: 'films',
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
+        },
+      ],
       attributes: {
         exclude: ['createdAt', 'updatedAt'],
       },

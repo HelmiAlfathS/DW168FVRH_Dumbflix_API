@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       phone: DataTypes.STRING,
       address: DataTypes.STRING,
       subscribe: { type: DataTypes.BOOLEAN, defaultValue: false },
+      role: DataTypes.INTEGER,
     },
     {}
   );
