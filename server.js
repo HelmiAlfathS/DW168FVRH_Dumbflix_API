@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const router = require('./routes');
+const port = 3000;
 
 app.use(express.json());
 
@@ -17,5 +18,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(3000, () =>
-  console.log(`Server is running at http://localhost:3000}`)
+  console.log(`Server is running at http://localhost:${port}}`)
 );
