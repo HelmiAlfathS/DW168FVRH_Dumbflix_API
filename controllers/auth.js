@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken'); // token
 exports.register = async (req, res) => {
   try {
     const schema = Joi.object({
-      fullName: Joi.string().alphanum().min(4).max(30).required(),
+      fullName: Joi.string().min(4).max(30).required(),
       email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
         .required(),
@@ -16,8 +16,12 @@ exports.register = async (req, res) => {
       gender: Joi.string().required(),
       phone: Joi.string().min(10).required(),
       address: Joi.string().required(),
+      subscribe: Joi.boolean(),
+      role: Joi.number().integer(),
     });
     const { error } = schema.validate(req.body);
+    const { role } = req.body;
+    console.log(role);
 
     if (error)
       return res.status(400).send({
@@ -38,14 +42,20 @@ exports.register = async (req, res) => {
         password: hashedPassword,
       });
       const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY);
+      const userMatch = await Users.findOne({
+        where: { email },
+      });
+      const id = userMatch.id;
       res.send({
+        status: 'Registration success',
         data: {
           email,
           token,
+          id,
         },
       });
     } else {
-      res.status(201).send({
+      res.status(401).send({
         message: 'Email sudah terdaftar, mohon gunakan alamat email yang lain.',
       });
     }
@@ -80,10 +90,12 @@ exports.login = async (req, res) => {
     if (!validPass) return res.status(400).send({ message: 'Invalid Login' });
 
     const token = jwt.sign({ id: userMatch.id }, process.env.SECRET_KEY);
+    const id = userMatch.id;
     res.send({
       data: {
         email,
         token,
+        id,
       },
     });
   } catch (error) {
